@@ -1,0 +1,23 @@
+FROM ubuntu:17.10
+
+RUN apt-get -qq update && apt-get install -qq -y curl ca-certificates
+
+RUN curl -O https://prerelease.keybase.io/keybase_amd64.deb
+RUN dpkg -i --force-depends keybase_amd64.deb && apt-get install -f -y -qq
+RUN useradd -m configbase
+
+RUN apt-get -qq -y install expect
+
+USER configbase:configbase
+RUN run_keybase
+
+
+
+RUN mkdir -p /home/configbase/.config/keybase
+ADD --chown=configbase:configbase secrets/config.json /home/configbase/.config/keybase/
+ADD --chown=configbase:configbase secrets/secretkeys.configbase.mpack /home/configbase/.config/keybase/
+ADD --chown=configbase:configbase secrets/expect.sh /home/configbase/.config/keybase/
+WORKDIR /home/configbase
+
+RUN .config/keybase/expect.sh
+
