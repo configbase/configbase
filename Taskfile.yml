@@ -1,0 +1,9 @@
+version: '2'
+tasks:
+  proto:
+    cmds:
+      - protoc -I proto/ proto/*.proto --go_out=plugins=grpc:protocol
+  test:
+    deps: [proto]
+    cmds:
+      - go test -v -cover ./...

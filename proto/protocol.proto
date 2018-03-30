@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+enum challenge {
+    TOKEN = 0;
+    AWS_KMS = 1;
+    GC_KMS = 2;
+}
+
+enum action {
+    INIT = 0;
+    CHALLENGE = 1;
+    CHALLENGE_RESPONSE = 2;
+    PAYLOAD = 3;
+    FAIL = 4;
+}
+
+message ConfigRequest {
+    string repo = 1;
+    string file = 2;
+    challenge challenge_type = 3;
+    string nonce = 4;
+    action action = 5;
+    bytes value = 6;
+}
+
+message ConfigResponse {
+    string repo = 1;
+    string file = 2;
+    challenge challenge_type = 3;
+    string nonce = 4;
+    action action = 5;
+    bytes key = 6;
+    bytes value = 7;
+}
